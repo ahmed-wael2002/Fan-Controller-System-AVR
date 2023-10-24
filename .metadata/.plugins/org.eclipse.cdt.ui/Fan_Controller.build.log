@@ -1,0 +1,41 @@
+18:31:18 **** Incremental Build of configuration Debug for project Fan_Controller ****
+make all 
+Building file: ../adc.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"adc.d" -MT"adc.o" -c -o "adc.o" "../adc.c"
+Finished building: ../adc.c
+ 
+Building file: ../lm35_sensor.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -O0 -fpack-struct -fshort-enums -ffunction-sections -fdata-sections -std=gnu99 -funsigned-char -funsigned-bitfields -mmcu=atmega32 -DF_CPU=1000000UL -MMD -MP -MF"lm35_sensor.d" -MT"lm35_sensor.o" -c -o "lm35_sensor.o" "../lm35_sensor.c"
+In file included from ../lm35_sensor.c:13:
+c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:90:3: warning: #warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+Finished building: ../lm35_sensor.c
+ 
+Building target: Fan_Controller.elf
+Invoking: AVR C Linker
+avr-gcc -Wl,-Map,Fan_Controller.map -mmcu=atmega32 -o "Fan_Controller.elf"  ./adc.o ./gpio.o ./lcd.o ./lm35_sensor.o ./motor.o ./project.o ./timer.o   
+Finished building target: Fan_Controller.elf
+ 
+Invoking: AVR Create Extended Listing
+avr-objdump -h -S Fan_Controller.elf  >"Fan_Controller.lss"
+Finished building: Fan_Controller.lss
+ 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega32 Fan_Controller.elf
+AVR Memory Usage
+----------------
+Device: atmega32
+
+Program:   10076 bytes (30.7% Full)
+(.text + .data + .bootloader)
+
+Data:        302 bytes (14.7% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+18:31:19 Build Finished. 0 errors, 1 warnings. (took 1s.205ms)
+

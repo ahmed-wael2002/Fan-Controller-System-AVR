@@ -1,0 +1,63 @@
+/*
+ *  adc.c
+ *  Created on: Oct 8, 2023
+ *  Author: Wael
+ */
+
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include "common_macros.h"
+#include "adc.h"
+
+volatile uint16 ADC_data = 0;
+
+/*********************************
+ *        ISR DEFINITIONS        *
+ *********************************/
+
+ISR(ADC_vect){
+	ADC_data = ADC;
+}
+
+/*********************************
+ *      FUNCTION DEFINITIONS     *
+ *********************************/
+
+void ADC_init(const ADC_Config * config_ptr){
+	/* ADMUX Register Bits Description:
+	 * REFS1:0 	: Reference Selection Bits = config_ptr->voltage
+	 * ADLAR   	: Left Adjust Result = 0 (ADC is right adjusted)
+	 * MUX4:0  	: Channel and Gain Bits (Adjusted in ADC_readChannel function)
+	 */
+	ADMUX = (config_ptr->voltage) << REFS0;
+
+	/* ADCSRA Register Bits Description:
+	 * ADEN		: ADC Enable = 1
+	 * ADSC		: ADC Start Conversion = 0 (Start Conversion in ADC_readChannel function)
+	 * ADATE	: ADC Auto Trigger Enable = 0
+	 * ADIF		: ADC Interrupt Flag = 0 (Flag initialized with 0)
+	 * ADIE		: ADC Interrupt Enable = config_ptr->mode
+	 * ADPS2:0	: Prescaler Select Bits = config_ptr->prescaler
+	 */
+
+	ADCSRA = (1<<ADEN)
+			| ((config_ptr->mode)<<ADIE)
+			| (config_ptr->prescaler);
+}
+
+void ADC_readChannel(uint8 channel_num){
+	/** Insert Channel into ADMUX Register **/
+	ADMUX = (ADMUX&0xE0) | (channel_num&0x1F);
+
+	/** Start Conversion **/
+	SET_BIT(ADCSRA, ADSC);
+
+	/** Polling Mode - ADC Interrupt Enable = 0 **/
+	if (BIT_IS_CLEAR(ADCSRA, ADIE)){
+		while(BIT_IS_CLEAR(ADCSRA, ADIF));	/* Busy wait till Flag=1 */
+		SET_BIT(ADCSRA, ADIF);				/* Resetting Flag -- ADIF=1 */
+		ADC_data = ADC;
+	}
+}
+
+

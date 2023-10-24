@@ -1,0 +1,44 @@
+/*
+ * timer.h
+ *
+ *  Created on: Oct 11, 2023
+ *      Author: Wael
+ */
+
+#ifndef TIMER_H_
+#define TIMER_H_
+
+#include "std_types.h"
+
+/***********************************************
+ * 				TYPES DEFINITIONS
+ ***********************************************/
+typedef enum{
+	CLK_1=1,
+	CLK_8,
+	CLK_64,
+	CLK_256,
+	CLK_1024,
+	EXTERNAL_FALLING_EDGE,
+	EXTERNAL_RISING_EDGE
+}Timer_Prescaler;
+
+typedef enum{
+	NORMAL,
+	PWM_PHASE_CORRECT,
+	COMPARE,
+	FAST_PWM
+}Timer_Mode;
+
+typedef struct{
+	Timer_Prescaler prescaler;
+	Timer_Mode mode;
+}Timer_Config;
+
+/***********************************************
+ * 			   FUNCTION PROTOTYPES
+ ***********************************************/
+void Timer0_init(const Timer_Config* configs);
+void PWM_Timer0_Start(uint8 duty_cycle);
+
+#endif /* TIMER_H_ */

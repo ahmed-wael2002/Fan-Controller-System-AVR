@@ -1,0 +1,64 @@
+/*
+ * project.c
+ *
+ *  Created on	: Oct 11, 2023
+ *  Author		: Ahmed Wael
+ */
+
+/* Included HAL Header Files for needed hardware */
+#include "lcd.h"
+#include "lm35_sensor.h"
+#include "motor.h"
+
+/* Define data type for temporary variables */
+#include "std_types.h"
+
+int main(void){
+
+	/* Initialzing LM35 Sensor:
+	 * 	Setting up the dynamic configurations of the ADC module
+	 */
+	LM35_init();
+
+	/* Initializing Motor */
+	DcMotor_init();
+
+	/* Initializing LCD */
+	LCD_init();
+	LCD_displayString("FAN is ");
+	LCD_moveCursor(1,0);
+	LCD_displayString("Temp =     C");
+
+	/** VARIABLE DECLARATION **/
+	uint8 temp = 0;
+
+	while(1){
+		/* Reading the temperature from the LM35 Sensor */
+		temp = LM35_getTemperature();
+
+		/* Configuring Fan Motor based on temperature value */
+		if (temp < 30)
+			DcMotor_Rotate(OFF,0);
+		else if ((temp>=30) && (temp<60))
+			DcMotor_Rotate(CLOCKWISE, 25);
+		else if ((temp>=60) && (temp<90))
+			DcMotor_Rotate(CLOCKWISE, 50);
+		else if ((temp>=90) && (temp<120))
+			DcMotor_Rotate(CLOCKWISE, 75);
+		else
+			DcMotor_Rotate(CLOCKWISE, 100);
+
+		/* Handling Fan info in LCD */
+		if (temp<30){
+			LCD_moveCursor(0,7);
+			LCD_displayString("OFF");
+		}
+		else{
+			LCD_moveCursor(0,7);
+			LCD_displayString("ON ");
+		}
+
+	}
+	return 0;
+}
+

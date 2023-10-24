@@ -1,0 +1,33 @@
+/*
+ * project.c
+ *
+ *  Created on	: Oct 11, 2023
+ *  Author		: Ahmed Wael
+ */
+
+#include "lcd.h"
+#include "adc.h"
+#include "lm35_sensor.h"
+#include "motor.h"
+
+int main(void){
+	/* Initializing ADC */
+	ADC_Config adc_configurations = {POLLING_MODE, PRESCALER_8, INTERNAL};
+	ADC_init(&adc_configurations);
+
+	/* Initializing LCD */
+	LCD_init();
+
+	/* Initializing Timer --Setting up PWM Signal */
+	Timer_Config timer_configurations = {PRESCALER_8, FAST_PWM, NON_INVERTING};
+	Timer_init(&timer_configurations);
+
+	/* Initializing Motor */
+	Motor_init();
+
+	while(1){
+
+	}
+	return 0;
+}
+

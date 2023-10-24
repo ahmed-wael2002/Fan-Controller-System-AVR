@@ -1,0 +1,13 @@
+/*
+ * motor.c
+ *
+ *  Created on: Oct 11, 2023
+ *      Author: Wael
+ */
+
+#include "motor.h"
+#include "timer.h"
+#include "gpio.h"
+
+void DcMoto_init(void);
+void DcMotor_Rotate(DcMotor_State state, uint8 speed);

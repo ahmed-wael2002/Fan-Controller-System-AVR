@@ -1,0 +1,22 @@
+/*
+ * timer.c
+ *
+ *  Created on: Oct 11, 2023
+ *      Author: Wael
+ */
+
+#include "timer.h"
+#include "gpio.h"
+
+/*
+ * Function to initialize Timer0 with configurations and its
+ * functionality
+ */
+void Timer0_init(const Timer_Config* configs){
+
+}
+
+
+void PWM_Timer0_Start(uint8 duty_cycle){
+
+}

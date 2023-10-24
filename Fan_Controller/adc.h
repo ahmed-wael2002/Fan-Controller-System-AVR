@@ -1,0 +1,59 @@
+/*
+ * adc.h
+ *
+ *  Created on: Oct 8, 2023
+ *      Author: Ahmed Wael
+ */
+
+#ifndef ADC_H_
+#define ADC_H_
+
+#include "std_types.h"
+
+#define ADC_MAXIMUM_VALUE    1023
+#define ADC_REF_VOLT_VALUE   2.56
+
+
+/*********************************
+ *       TYPES DECLARATION
+ *********************************/
+typedef enum{
+	POLLING_MODE,
+	INTERRUPT_MODE
+}ADC_ModeType;
+
+typedef enum{
+	PRESCALER_2=1,
+	PRESCALER_4,
+	PRESCALER_8,
+	PRESCALER_16,
+	PRESCALER_32,
+	PRESCALER_64,
+	PRESCALER_128
+}ADC_PrescalerType;
+
+typedef enum{
+	AREF,
+	AVCC,
+	INTERNAL=3
+}ADC_VoltageType;
+
+typedef struct{
+	ADC_ModeType mode;
+	ADC_PrescalerType prescaler;
+	ADC_VoltageType voltage;
+}ADC_Config;
+
+/*********************************
+ *        GLOBAL VARIABLE
+ *********************************/
+/** ONLY used in INTERRUPT_MODE **/
+extern volatile uint16 ADC_data;
+
+/*********************************
+ *       FUNCTION PROTOTYPES
+ *********************************/
+void ADC_init(const ADC_Config * config_ptr);
+void ADC_readChannel(uint8 channel_num);
+
+#endif /* ADC_H_ */

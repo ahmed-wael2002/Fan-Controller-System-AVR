@@ -1,0 +1,55 @@
+/*
+ * project.c
+ *
+ *  Created on	: Oct 11, 2023
+ *  Author		: Ahmed Wael
+ */
+
+#include "lcd.h"
+#include "adc.h"
+#include "timer.h"
+#include "lm35_sensor.h"
+#include "motor.h"
+#include "std_types.h"
+
+int main(void){
+	/* Initializing ADC */
+	ADC_Config adc_configurations = {POLLING_MODE, PRESCALER_8, INTERNAL};
+	ADC_init(&adc_configurations);
+
+	/* Initializing Timer --Setting up PWM Signal */
+	Timer_Config timer_configurations = {PRESCALER_8, FAST_PWM, NON_INVERTING};
+	Timer_init(&timer_configurations);
+
+	/* Initializing Motor */
+	Motor_init();
+
+	/* Initializing LCD */
+	LCD_init();
+	LCD_displayString("FAN is ");
+	LCD_moveCursor(1,0);
+	LCD_displayString("Temp =     C");
+
+	/** VARIABLE DECLARATION **/
+	uint8 temp = 0;
+
+	while(1){
+		/* Reading the temperature from the LM35 Sensor */
+		temp = LM35_getTemperature();
+
+		/* Configuring Fan Motor based on temperature value */
+		if (temp < 30)
+			DcMotor_Rotate(OFF,0);
+		else if ((temp>=30) && (temp<60))
+			DcMotor_Rotate(CLOCKWISE, 25);
+		else if ((temp>=60) && (temp<90))
+			DcMotor_Rotate(CLOCKWISE, 50);
+		else if ((temp>=90) && (temp<120))
+			DcMotor_Rotate(CLOCKWISE, 75);
+		else
+			DcMotor_Rotate(CLOCKWISE, 100);
+
+	}
+	return 0;
+}
+
